@@ -10,16 +10,24 @@ use App\Models\MethodPayment;
 use App\Models\Refferal;
 use App\Models\Sold;
 use App\Models\SourceCode;
+use App\Models\Staff\FitnessConsultant;
+use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use PDF;
+
 
 class MemberController extends Controller
 {
     public function index()
     {
+        $currentTime = Carbon::now()->tz('Asia/Jakarta');
+
         $data = [
             'title'             => 'Member List',
             'members'           => Member::get(),
@@ -27,8 +35,10 @@ class MemberController extends Controller
             'sourceCode'        => SourceCode::get(),
             'memberPackage'     => MemberPackage::get(),
             'methodPayment'     => MethodPayment::get(),
-            'soldBy'            => Sold::get(),
-            'refferalName'      => Refferal::get(),
+            'fitnessConsultant' => FitnessConsultant::get(),
+            'referralName'      => Member::get(),
+            'users'             => User::get(),
+            'currentTime'       => $currentTime,
             'content'           => 'admin/member/index'
         ];
 
@@ -44,8 +54,9 @@ class MemberController extends Controller
             'sourceCode'        => SourceCode::get(),
             'memberPackage'     => MemberPackage::get(),
             'methodPayment'     => MethodPayment::get(),
-            'soldBy'            => Sold::get(),
-            'refferalName'      => Refferal::get(),
+            'fitnessConsultant' => FitnessConsultant::get(),
+            'referralName'      => FitnessConsultant::get(),
+            // 'refferalName'      => FitnessConsultant::get(),
             'content'           => 'admin/member/create-page',
         ];
 
@@ -60,10 +71,11 @@ class MemberController extends Controller
             'phone_number'          => 'required',
             'source_code_id'        => 'required|exists:source_codes,id',
             'member_package_id'     => 'required|exists:member_packages,id',
+            'start_date'            => '',
             'expired_date'          => '',
             'method_payment_id'     => 'required|exists:method_payments,id',
-            'sold_by_id'            => 'required|exists:solds,id',
-            'refferal_id'           => 'required|exists:refferals,id',
+            'fc_id'                 => 'required|exists:fitness_consultants,id',
+            'refferal_id'           => 'required|exists:fitness_consultants,id',
             'status'                => 'required',
             'description'           => '',
             'photos'                => 'mimes:png,jpg,jpeg|max:2048'
@@ -102,20 +114,36 @@ class MemberController extends Controller
 
     public function memberSecondStore(Request $request)
     {
-        $data = $request->validate([
-            'full_name'            => 'required',
-            'gender'                => 'required',
-            'phone_number'          => 'required',
-            'source_code_id'        => 'required|exists:source_codes,id',
-            'member_package_id'     => 'required|exists:member_packages,id',
-            'expired_date'          => '',
-            'method_payment_id'     => 'required|exists:method_payments,id',
-            'sold_by_id'            => 'required|exists:solds,id',
-            'refferal_id'           => 'required|exists:refferals,id',
-            'status'                => 'required',
-            'description'           => '',
-            'photos'                => 'mimes:png,jpg,jpeg|max:2048'
-        ]);
+        // $try = DB::table('members')->join('fitness_consultants', 'members.id' '=', 'fitness_consultants.members_fk_fc')->select('members.*', 'fitness_consultants');
+
+        // $memberPackage = ;
+
+        $data = $request->validate(
+            [
+                'full_name'             => 'required',
+                'gender'                => 'required',
+                'phone_number'          => '',
+                'source_code_id'        => 'required|exists:source_codes,id',
+                'member_package_id'     => 'required|exists:member_packages,id',
+                'start_date'            => '',
+                'expired_date'          => '',
+                'method_payment_id'     => 'required|exists:method_payments,id',
+                // 'fc_id'                 => 'required|exists:fitness_consultants,id',
+                'refferal_id'           => '',
+                'status'                => 'required',
+                'description'           => '',
+                'user_id'               => '',
+                'photos'                => 'mimes:png,jpg,jpeg|max:2048'
+            ],
+            // This is custom error message
+            [
+                'full_name.required'        => 'Full Name tidak boleh kosong',
+                'gender.required'           => 'Gender tidak boleh kosong',
+                'source_code_id.exists'     => 'Source Code tidak boleh kosong',
+                'member_package_id.exists'  => 'Member Package tidak boleh kosong',
+                'method_payment_id.exists'  => 'Method Payment tidak boleh kosong',
+            ]
+        );
 
         $member = $request->member_code;
         $memberCode = 'GG-' . $member . '-M';
@@ -151,7 +179,20 @@ class MemberController extends Controller
 
     public function edit(string $id)
     {
-        // 
+        $data = [
+            'title'             => 'Edit Member',
+            'member'            => Member::find($id),
+            'members'           => Member::get(),
+            'memberLastCode'    => Member::latest('id')->first(),
+            'sourceCode'        => SourceCode::get(),
+            'memberPackage'     => MemberPackage::get(),
+            'methodPayment'     => MethodPayment::get(),
+            'fitnessConsultant' => FitnessConsultant::get(),
+            'referralName'      => FitnessConsultant::get(),
+            'content'           => 'admin/member/edit-page',
+        ];
+
+        return view('admin.layouts.wrapper', $data);
     }
 
     public function update(Request $request, string $id)
@@ -163,19 +204,19 @@ class MemberController extends Controller
             'phone_number'          => '',
             'source_code_id'        => 'exists:source_codes,id',
             'member_package_id'     => 'exists:member_packages,id',
-            'expired_date'          => '',
+            'start_date'            => '',
             'method_payment_id'     => 'exists:method_payments,id',
-            'sold_by_id'            => 'exists:solds,id',
-            'refferal_id'           => 'exists:refferals,id',
+            'fc_id'                 => 'exists:fitness_consultants,id',
+            'refferal_id'           => '',
             'status'                => '',
             'description'           => '',
-            'photos'                => 'nullable|mimes:png,jpg,jpeg'
+            'photos'                => 'mimes:png,jpg,jpeg|max:2048'
         ]);
 
         if ($request->hasFile('photos')) {
 
-            if ($item->photos != null) {
-                $realLocation = "storage/" . $item->photos;
+            if ($request->photos != null) {
+                $realLocation = "storage/" . $request->photos;
                 if (file_exists($realLocation) && !is_dir($realLocation)) {
                     unlink($realLocation);
                 }
@@ -186,7 +227,7 @@ class MemberController extends Controller
 
             $data['photos'] = $request->file('photos')->store('assets/member', 'public');
         } else {
-            $data['photos'] = $item->photos;
+            $data['photos'] = $request->photos;
         }
 
         $item->update($data);
@@ -210,13 +251,25 @@ class MemberController extends Controller
             // Alert::error('Error', $e->getMessage());
             return redirect()->back()->with('error', 'Member Deleted Failed, please check other session where using this member');
         }
+    }
 
+    public function cetak_pdf()
+    {
+        $members            = Member::orderBy('full_name')->get();
+        $sourceCodes        = SourceCode::all();
+        $memberPackages     = MemberPackage::all();
+        $methodPayments     = MethodPayment::all();
+        $fitnessConsultants = FitnessConsultant::all();
+        $referralNames      = FitnessConsultant::all();
 
-        // try {
-        //     $member->delete();
-        //     return redirect()->back()->with('message', 'Member Deleted Successfully');
-        // } catch (\Throwable $th) {
-        //     return redirect()->back()->with('error', 'Trainer Deleted Failed, please check other session where using this trainer');
-        // }
+        $pdf = PDF::loadView('admin/member/member_pdf', [
+            'members'               => $members,
+            'sourceCodes'           => $sourceCodes,
+            'memberPackages'        => $memberPackages,
+            'methodPayments'        => $methodPayments,
+            'fitnessConsultants'    => $fitnessConsultants,
+            'referralNames'         => $referralNames
+        ])->setPaper('a4', 'landscape');
+        return $pdf->stream('laporan-member-pdf');
     }
 }

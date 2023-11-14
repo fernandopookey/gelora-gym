@@ -24,11 +24,11 @@ class TrainerSessionStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'active_period'         => 'required|string',
             'member_id'             => 'required|exists:members,id',
             'trainer_id'            => 'required|exists:personal_trainers,id',
+            'start_date'            => 'required|string',
             'trainer_package_id'    => 'required|exists:trainer_packages,id',
-            'remaining_session'     => 'required',
+            'remaining_session'     => '',
             'status'                => 'required',
             'user_id'               => ''
         ];

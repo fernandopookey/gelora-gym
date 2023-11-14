@@ -50,7 +50,7 @@
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
                             <input type="text" name="phone_number" value="{{ old('phone_number') }}"
-                                class="form-control" id="exampleFormControlInput1" autocomplete="off" required>
+                                class="form-control" id="exampleFormControlInput1" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-xl-6">
@@ -70,9 +70,8 @@
                     <div class="col-xl-6">
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Member Package</label>
-                            <select name="member_package_id" class="form-control" aria-label="Default select example"
-                                required>
-                                <option disabled selected value>
+                            <select id="single-select" name="member_package_id" class="form-control" required>
+                                <option>
                                     <- Choose ->
                                 </option>
                                 @foreach ($memberPackage as $item)
@@ -81,19 +80,28 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-6">
+                    <div class="col-xl-3">
+                        <div class="mb-3">
+                            <label class="form-label">Start Date</label>
+                            <input type="text" name="start_date" value="{{ old('start_date') }}"
+                                class="form-control" placeholder="Choose start date" id="mdate" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
                         <div class="mb-3">
                             <label class="form-label">Expired Date</label>
                             <input type="text" name="expired_date" value="{{ old('expired_date') }}"
-                                class="form-control" placeholder="Choose expired date" id="mdate">
+                                class="form-control" placeholder="Choose expired date" id="mdate2" required>
+                            {{-- <label class="form-label">Expired Date</label>
+                            <input type="text" name="expired_date" value="{{ old('expired_date') }}"
+                                class="form-control" placeholder="Choose expired date" id="mdate2"> --}}
                         </div>
                     </div>
                     <div class="col-xl-6">
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Method Payment</label>
-                            <select name="method_payment_id" class="form-control" aria-label="Default select example"
-                                required>
-                                <option disabled selected value>
+                            <select id="single-select4" name="method_payment_id" class="form-control" required>
+                                <option>
                                     <- Choose ->
                                 </option>
                                 @foreach ($methodPayment as $item)
@@ -102,29 +110,34 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-6">
+                    {{-- <div class="col-xl-6">
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Sold By</label>
-                            <select name="sold_by_id" class="form-control" aria-label="Default select example" required>
-                                <option disabled selected value>
+                            <select id="single-select2" name="fc_id" class="form-control" required>
+                                <option>
                                     <- Choose ->
                                 </option>
-                                @foreach ($soldBy as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @foreach ($fitnessConsultant as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->full_name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-xl-6">
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Refferal Name</label>
-                            <select name="refferal_id" class="form-control" aria-label="Default select example"
-                                required>
-                                <option disabled selected value>
+                            <label for="exampleFormControlInput1" class="form-label">Referral Name</label>
+                            <select id="single-select3" name="refferal_id" class="form-control" required>
+                                <option>
                                     <- Choose ->
                                 </option>
-                                @foreach ($refferalName as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @foreach ($referralName as $item)
+                                    <option value="{{ $item->id }}">{{ $item->full_name }} | Fitness Consultant
+                                    </option>
+                                @endforeach
+                                @foreach ($members as $item)
+                                    <option value="{{ $item->id }}">{{ $item->full_name }} | Member</option>
                                 @endforeach
                             </select>
                         </div>
