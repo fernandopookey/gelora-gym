@@ -30,6 +30,14 @@
                         </div>
                         <div class="col-xl-6">
                             <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Code</label>
+                                <input type="text" name="pt_code"
+                                    value="{{ old('pt_code') }}" class="form-control"
+                                    id="exampleFormControlInput1" required autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Gender</label>
                                 <select name="gender" class="form-control" aria-label="Default select example" required
                                     autocomplete="off">
@@ -38,6 +46,19 @@
                                     </option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Type</label>
+                                <select name="type" class="form-control" aria-label="Default select example" required
+                                    autocomplete="off">
+                                    <option disabled selected value>
+                                        <- Choose ->
+                                    </option>
+                                    <option value="PT">PT</option>
+                                    <option value="Non-PT">Non PT</option>
                                 </select>
                             </div>
                         </div>
@@ -115,6 +136,14 @@
                             </div>
                             <div class="col-xl-6">
                                 <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Code</label>
+                                    <input type="text" name="pt_code"
+                                        value="{{ old('pt_code', $item->pt_code) }}" class="form-control"
+                                        id="exampleFormControlInput1" required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="mb-3">
                                     <label for="exampleFormControlInput1" class="form-label">Gender</label>
                                     <select name="gender" class="form-control" aria-label="Default select example">
                                         <option value="{{ $item->gender }}" selected>
@@ -122,6 +151,19 @@
                                         </option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Type</label>
+                                    <select name="type" class="form-control" aria-label="Default select example" required
+                                        autocomplete="off">
+                                        <option value="{{ $item->type }}" selected>
+                                            {{ old('type', $item->type) }}
+                                        </option>
+                                        <option value="PT">PT</option>
+                                        <option value="Non-PT">Non PT</option>
                                     </select>
                                 </div>
                             </div>

@@ -112,7 +112,7 @@
                             fill="white" />
                     </svg>
                 </div> --}}
-                <img src="{{ asset('LEVELFIT.png') }}" class="img-fluid" alt="">
+                <img src="{{ asset('gelora-gym-2.png') }}" class="img-fluid" alt="">
             </a>
 
 

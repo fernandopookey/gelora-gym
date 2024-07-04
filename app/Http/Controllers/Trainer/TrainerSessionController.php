@@ -422,16 +422,20 @@ class TrainerSessionController extends Controller
 
     public function agreement($id)
     {
-        $trainerSession = TrainerSession::getActivePTListById($id);
-        // dd($trainerSession[0]->member_name);
+        $trainerSession = TrainerSession::agreement($id);
+        // dd($trainerSession[0]);
+        // dd($trainerSession);
+        // foreach ($trainerSession as $item) {
+        //     $result = $item->id;
+        // }
 
-        $fileName1 = $trainerSession[0]->member_name;
-        $fileName2 = $trainerSession[0]->start_date;
+        // $fileName1 = $trainerSession->member_name;
+        // $fileName2 = $trainerSession->start_date;
 
         $pdf = Pdf::loadView('admin/trainer-session/agreement', [
             'trainerSession'        => $trainerSession[0],
         ]);
-        return $pdf->stream('PT Agreement-' . $fileName1 . '-' . $fileName2 . '.pdf');
+        return $pdf->stream('PT Agreement-.pdf');
     }
 
     public function cuti($id)

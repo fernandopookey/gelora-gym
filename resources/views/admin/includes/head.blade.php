@@ -107,7 +107,7 @@
                 <div class="dot"></div>
                 <div class="dot"></div>
             </div> --}}
-            <img src="{{ asset('LEVELFIT.png') }}" class="img-fluid" width="500" alt="">
+            <img src="{{ asset('gelora-gym.png') }}" class="img-fluid" width="500" alt="">
         </div>
     </div>
     <!--*******************
@@ -138,7 +138,7 @@
                             fill="white" />
                     </svg>
                 </div> --}}
-                <img src="{{ asset('LEVELFIT.png') }}" class="img-fluid" alt="">
+                <img src="{{ asset('gelora-gym.png') }}" class="img-fluid" alt="">
             </a>
 
 
