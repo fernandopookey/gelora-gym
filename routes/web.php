@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsensiNonPTController;
 use App\Http\Controllers\Admin\AppointmentStatusChangeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Member\MemberCheckInController;
@@ -190,6 +191,12 @@ Route::prefix('/')->namespace('Admin')->middleware(['auth', 'admin'])->group(fun
     Route::get('appointment/{id}', [MissedGuestController::class, 'appointment'])->name('appointment');
     Route::get('appointment-schedule', [MissedGuestController::class, 'appointmentSchedule'])->name('appointmentSchedule');
     Route::post('store-appointment/{id}', [MissedGuestController::class, 'storeAppointment'])->name('storeAppointment');
+
+    Route::get('absensi', [AbsensiNonPTController::class, 'index'])->name('absensi-non-pt');
+
+    Route::post('proses-pt-absensi', [AbsensiNonPTController::class, 'store'])->name('proses-pt-absensi');
+    Route::get('absensi-non-pt-detail/{id}', [AbsensiNonPTController::class, 'show'])->name('absensi-non-pt-detail');
+    // Route::resource('trainer-session-check-in', '\App\Http\Controllers\Trainer\TrainerSessionCheckInController');
 
     Route::get('/tes', function () {
         return view('admin.member-registration.tes');

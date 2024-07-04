@@ -123,6 +123,13 @@
                 </ul>
             </li>
 
+            <li>
+                <a href="{{ route('absensi-non-pt') }}" aria-expanded="false">
+                    <i class="material-symbols-outlined">home</i>
+                    <span class="nav-text">Absensi Non PT</span>
+                </a>
+            </li>
+
             @if (Auth::user()->role == 'ADMIN')
                 <li>
                     <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">

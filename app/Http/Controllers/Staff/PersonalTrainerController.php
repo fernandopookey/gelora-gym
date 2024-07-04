@@ -23,10 +23,12 @@ class PersonalTrainerController extends Controller
     {
         $data = $request->validate([
             'full_name'     => 'required|string|max:200',
-            'phone_number'  => '',
+            'phone_number'  => 'nullable',
             'gender'        => 'required',
-            'address'       => '',
-            'description'   => '',
+            'address'       => 'nullable',
+            'description'   => 'nullable',
+            'type'          => 'nullable',
+            'pt_code'       => 'nullable'
         ]);
         $data['user_id'] = Auth::user()->id;
 
@@ -48,6 +50,8 @@ class PersonalTrainerController extends Controller
             'gender'        => 'nullable',
             'address'       => 'nullable',
             'description'   => 'nullable',
+            'type'          => 'nullable',
+            'pt_code'       => 'nullable'
         ]);
         $data['user_id'] = Auth::user()->id;
 
